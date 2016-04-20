@@ -1,0 +1,38 @@
+{
+  "name": "hapi-clerk",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/clerk.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indieforger/hapi-clerk.git"
+  },
+  "keywords": [
+    "hapi",
+    "clerk",
+    "subscriber",
+    "subscription"
+  ],
+  "author": "IndieForger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/indieforger/hapi-clerk/issues"
+  },
+  "homepage": "https://github.com/indieforger/hapi-clerk#readme",
+  "dependencies": {
+    "bcrypt": "^0.8.7",
+    "boom": "^3.2.2",
+    "hapi": "^14.2.0",
+    "hapi-auth-jwt2": "^7.1.2",
+    "hoek": "^4.0.2",
+    "joi": "^9.0.4",
+    "moment": "^2.14.1",
+    "mongoose": "^4.5.10"
+  }
+}
