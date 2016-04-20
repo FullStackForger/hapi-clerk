@@ -22,9 +22,10 @@ npm-debug.log
 # Bower components
 bower_components
 
-# IntelliJ IDEA files
+# Editor files
 .idea/
 *.iml
+.vscode
 
 # osx specific files
 *~
