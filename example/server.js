@@ -6,20 +6,20 @@ const clerk = require('./../');
 
 // predefined topic identified by code
 const topics = [{
-	"code": "G.JEWEL",
+	"code": "test.jewelines",
 	"required": false,
-	"info": "Jewelines - Color matching puzzle game"
+	"info": "Early access: Jewelines - Color Matching Puzzle Game"
 }, {
-	"code": "N.INTERNAL",
+	"code": "news.internal",
 	"required": false,
-	"info": "Newsletter: IndieForger games"
+	"info": "News: IndieForger games"
 }, {
-	"code": "N.GAMES",
+	"code": "news.reviews",
 	"required": false,
-	"info": "Newsletter: game reviews"
+	"info": "News: game reviews"
 }];
 
-const config = Object.assign({}, defaults, { topics: topics });
+const config = Object.assign({}, defaults, { topics: topics,  });
 const server = new Hapi.Server();
 const connection = {
 	host: config.server.host,
@@ -33,7 +33,8 @@ const plugins = [{
 	register: clerk,
 	options: {
 		auth: config.auth,
-		database: config.database
+		database: config.database,
+		topics: config.topics
 	}
 }];
 
