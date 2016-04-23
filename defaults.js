@@ -25,11 +25,7 @@ var config = {
 			algorithms: [ 'HS256' ] // only allow HS256 algorithm
 		}
 	},
-	topics: [{
-		code: 'DEF:TOC',
-		required: true,
-		info: 'Site Terms and Conditions'
-	}]
+	topics: []
 };
 
 try {
