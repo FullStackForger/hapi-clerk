@@ -19,7 +19,7 @@ const topics = [{
 	"info": "News: game reviews"
 }];
 
-const config = Object.assign({}, defaults, { topics: topics,  });
+const config = Object.assign({}, defaults, { topics: topics });
 const server = new Hapi.Server();
 const connection = {
 	host: config.server.host,
