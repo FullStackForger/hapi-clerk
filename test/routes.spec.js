@@ -32,7 +32,7 @@ let subscriberStub = {};
 let server;
 
 before(function (next) {
-	let Routes = proxyquire('./routes', { './model': subscriberStub });
+	let Routes = proxyquire('../lib/subscriber/routes', { './model': subscriberStub });
 	server = new Hapi.Server({ debug: false });
 	server.connection( { labels: 'api' });
 	let routePlugin = function (srv, opts, next ) {
