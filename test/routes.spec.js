@@ -33,13 +33,14 @@ let server;
 
 before(function (next) {
 	let Routes = proxyquire('../lib/subscriber/routes', { './model': subscriberStub });
-	server = new Hapi.Server({ debug: false });
-	server.connection( { labels: 'api' });
 	let routePlugin = function (srv, opts, next ) {
 		srv.route(Routes);
 		next();
-	}
-	routePlugin.attributes = { name: 'routes' }
+	};
+	routePlugin.attributes = { name: 'routes' };
+
+	server = new Hapi.Server({ debug: false });
+	server.connection( { labels: 'api' });
 	server.register({ register: routePlugin, options: mockPluginOpts })
 
 	next();
@@ -55,8 +56,8 @@ describe('GET /topics', function () {
 				expect(res.result).to.equal(mockPluginOpts.topics);
 				done();
 			});
-		})
-})
+		});
+});
 
 describe('GET /user/{userId}/topics', function () {
 
@@ -67,8 +68,8 @@ describe('GET /user/{userId}/topics', function () {
 		subscriberStub.findById = function () {
 			return new Promise(function(resolve, reject) {
 				resolve({ toObject: () => ({ topics: topics}) })
-			})
-		}
+			});
+		};
 
 		server.inject({ method: 'GET', url: `/user/${userId}/topics` }, (res) => {
 			expect(res.statusCode).to.equal(200);
@@ -101,8 +102,8 @@ describe('GET /user/{userId}/topics', function () {
 		subscriberStub.findById = function () {
 			return new Promise(function(resolve, reject) {
 				resolve(null);
-			})
-		}
+			});
+		};
 
 		server.inject({ method: 'GET', url: `/user/${userId}/topics` }, (res) => {
 			expect(res.statusCode).to.equal(404);
