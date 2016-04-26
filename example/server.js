@@ -1,5 +1,4 @@
 const Hapi = require('hapi');
-const Hoek = require('hoek');
 
 const defaults = require('./../defaults');
 const clerk = require('./../');

@@ -19,12 +19,6 @@ var config = {
 		username: process.env.MONGO_HOST || '',
 		password: process.env.MONGO_HOST || ''
 	},
-	auth: {
-		token: {
-			secret: process.env.TOKEN_SECRET || 'secret_token',
-			algorithms: [ 'HS256' ] // only allow HS256 algorithm
-		}
-	},
 	topics: []
 };
 
