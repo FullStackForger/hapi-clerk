@@ -31,7 +31,6 @@ const connection = {
 const plugins = [{
 	register: clerk,
 	options: {
-		auth: config.auth,
 		database: config.database,
 		topics: config.topics
 	}
