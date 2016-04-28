@@ -151,6 +151,15 @@ describe('PUT /user/{userId}/topics', function () {
 		});
 	});
 
+	it('should reply with 403 invalid topic', (done) => {
+		let userId = '123qwe123asd123zxc123';
+		let payload = { topics: ['toc', 'invalid']}
+
+		server.inject({ method: 'PUT', url: `/user/${userId}/topics`, payload }, (res) => {
+			expect(res.statusCode).to.equal(403);
+			done();
+		});
+	});
 
 	it('should reply with 404 for invalid user', (done) => {
 		let userId = '123qwe123asd123zxc123';
@@ -162,6 +171,21 @@ describe('PUT /user/{userId}/topics', function () {
 
 		server.inject({ method: 'PUT', url: `/user/${userId}/topics`, payload }, (res) => {
 			expect(res.statusCode).to.equal(404);
+			done();
+		});
+
+	});
+
+	it('should reply with 500 for server errors', (done) => {
+		let userId = '123qwe123asd123zxc123';
+		let payload = {topics: ['tac']};
+
+		SubscriberStub.update = function (selector, data, options, callback) {
+			callback(new Error('Expected test suite error'), null);
+		}
+
+		server.inject({method: 'PUT', url: `/user/${userId}/topics`, payload}, (res) => {
+			expect(res.statusCode).to.equal(500);
 			done();
 		});
 	});
