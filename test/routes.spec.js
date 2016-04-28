@@ -25,19 +25,32 @@ const mockPluginOpts = {
 	}]
 }
 
-// Locals
-let subscriberStub = {};
+
 let server;
 
+// Subscriber stub model mock (prevents db connection)
+let SubscriberStub = function (obj) {
+	let self = this;
+	self._id = obj._id;
+	self.topics = obj.topics;
+	self.toObject = function () {
+		return {
+			_id: self.id,
+			topics: self.topics
+		}
+	}
+};
+
+// setup server mocking subscriber model
 before(function (next) {
-	let Routes = proxyquire('../lib/subscriber/routes', { './model': subscriberStub });
+	let Routes = proxyquire('../lib/subscriber/routes', { './model': SubscriberStub });
 	let routePlugin = function (srv, opts, next ) {
 		srv.route(Routes);
 		next();
 	};
 	routePlugin.attributes = { name: 'routes' };
 
-	server = new Hapi.Server({ debug: false });
+	server = new Hapi.Server({debug: false});
 	server.connection( { labels: 'api' });
 	server.register({ register: routePlugin, options: mockPluginOpts })
 
@@ -63,7 +76,7 @@ describe('GET /user/{userId}/topics', function () {
 		let userId = '123qwe123asd123zxc123';
 		let topics = ['qwe', 'asd'];
 
-		subscriberStub.findById = function () {
+		SubscriberStub.findById = function () {
 			return new Promise(function(resolve, reject) {
 				resolve({ toObject: () => ({ topics: topics}) })
 			});
@@ -80,7 +93,7 @@ describe('GET /user/{userId}/topics', function () {
 	it('should reply (500) with implementation error', (done) => {
 		let userId = '123qwe123asd123zxc123';
 
-		subscriberStub.findById = function () {
+		SubscriberStub.findById = function () {
 			return new Promise(function(resolve, reject) {
 				reject(new Error("Expected implementation error."))
 			})
@@ -97,7 +110,7 @@ describe('GET /user/{userId}/topics', function () {
 		let userId = '123qwe123asd123zxc123';
 		let topics = ['qwe', 'asd'];
 
-		subscriberStub.findById = function () {
+		SubscriberStub.findById = function () {
 			return new Promise(function(resolve, reject) {
 				resolve(null);
 			});
@@ -115,11 +128,42 @@ describe('GET /user/{userId}/topics', function () {
 describe('PUT /user/{userId}/topics', function () {
 
 	it('should reply (200) with subscription topics', (done) => {
-		throw Error('Not implemented yet');
+		let userId = '123qwe123asd123zxc123';
+		let payload = { topics: ['tac']}
+
+		SubscriberStub.update = function (selector, data, options, callback) {
+			callback(null,  { id: 123 })
+		}
+
+		server.inject({ method: 'PUT', url: `/user/${userId}/topics`, payload }, (res) => {
+			expect(res.statusCode).to.equal(200);
+			done();
+		});
 	});
 
+	it('should reply with 403 invalid topic', (done) => {
+		let userId = '123qwe123asd123zxc123';
+		let payload = { topics: ['invalid']}
+
+		server.inject({ method: 'PUT', url: `/user/${userId}/topics`, payload }, (res) => {
+			expect(res.statusCode).to.equal(403);
+			done();
+		});
+	});
+
+
 	it('should reply with 404 for invalid user', (done) => {
-		throw Error('Not implemented yet');
+		let userId = '123qwe123asd123zxc123';
+		let payload = { topics: ['tac']}
+
+		SubscriberStub.update = function (selector, data, options, callback) {
+			callback(null, null)
+		}
+
+		server.inject({ method: 'PUT', url: `/user/${userId}/topics`, payload }, (res) => {
+			expect(res.statusCode).to.equal(404);
+			done();
+		});
 	});
 
 });
