@@ -50,7 +50,7 @@ before(function (next) {
 	};
 	routePlugin.attributes = { name: 'routes' };
 
-	server = new Hapi.Server({debug: false});
+	server = new Hapi.Server({ debug: false });
 	server.connection( { labels: 'api' });
 	server.register({ register: routePlugin, options: mockPluginOpts })
 
@@ -141,7 +141,17 @@ describe('PUT /user/{userId}/topics', function () {
 		});
 	});
 
-	it('should reply with 403 invalid topic', (done) => {
+	it('should reply with 400 for missing payload', (done) => {
+		let userId = '123qwe123asd123zxc123';
+		let payload = {};
+
+		server.inject({ method: 'PUT', url: `/user/${userId}/topics`, payload }, (res) => {
+			expect(res.statusCode).to.equal(400);
+			done();
+		});
+	});
+
+	it('should reply with 403 for invalid topics payload', (done) => {
 		let userId = '123qwe123asd123zxc123';
 		let payload = { topics: ['invalid']}
 
@@ -151,7 +161,7 @@ describe('PUT /user/{userId}/topics', function () {
 		});
 	});
 
-	it('should reply with 403 invalid topic', (done) => {
+	it('should reply with 403 if one of the payload topics is invalid', (done) => {
 		let userId = '123qwe123asd123zxc123';
 		let payload = { topics: ['toc', 'invalid']}
 
@@ -161,7 +171,7 @@ describe('PUT /user/{userId}/topics', function () {
 		});
 	});
 
-	it('should reply with 404 for invalid user', (done) => {
+	it('should reply with 404 for invalid user id', (done) => {
 		let userId = '123qwe123asd123zxc123';
 		let payload = { topics: ['tac']}
 
